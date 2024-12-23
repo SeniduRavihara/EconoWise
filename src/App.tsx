@@ -1,38 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { Button } from './components/ui/button'
+import {
+  createBrowserRouter,
+  RouterProvider,
+  createRoutesFromElements,
+  Route,
+} from "react-router-dom"
+import AuthLayout from "./_routes/_auth/AuthLayout";
+import SignupPage from "./_routes/_auth/forms/SignupPage";
+import LoginPage from "./_routes/_auth/forms/LoginPage";
+import HomePage from "./_routes/_root/pages/HomePage";
+import AuthContextProvider from "./context/AuthContext";
+import RootLayout from "./_routes/_root/RootLayout";
 
-function App() {
-  const [count, setCount] = useState(0)
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route>
+      {/* public routes */}
+      <Route element={<AuthLayout />}>
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Route>
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-
-      <Button variant="destructive">Click me</Button>
-    </>
+      {/* private routes */}
+      <Route element={<RootLayout />}>
+        <Route index element={<HomePage />} />
+      </Route>
+    </Route>
   )
-}
+);
 
-export default App
+const App = () => {
+  return (
+    <AuthContextProvider>
+      <RouterProvider router={router} />
+    </AuthContextProvider>
+  );
+};
+export default App;
