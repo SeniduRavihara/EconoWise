@@ -3,9 +3,11 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  User,
 } from "firebase/auth";
 import { auth, db, provider } from "./config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { UserDataType } from "@/types";
 
 export const logout = async () => {
   try {
@@ -89,6 +91,28 @@ export const googleSignIn = async () => {
       };
 
       await setDoc(userDocRef, userData);
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+
+// --------------------------------------------------
+
+export const featchCurrentUserData = async (currentUser: User) => {
+  try {
+    const documentRef = doc(db, "users", currentUser.uid);
+    const userDataDoc = await getDoc(documentRef);
+
+    if (userDataDoc.exists()) {
+      const userData = userDataDoc.data() as UserDataType;
+      console.log("Current user data fetched successfully", userData);
+      return userData;
+    } else {
+      console.log("Document does not exist.");
+      return null;
     }
   } catch (error) {
     console.error(error);
