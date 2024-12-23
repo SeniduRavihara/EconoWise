@@ -47,19 +47,11 @@ const StudentInfo = () => {
           currentUser?.uid
         )) as UserDataType;
         // console.log(userInfo);
-
         setFirstName(userInfo.firstName);
         setLastName(userInfo.lastName);
-        setWhatsapp(userInfo.whatsapp);
         setNic(userInfo.nic);
         setBDate(userInfo.bDate ? new Date(userInfo.bDate) : undefined);
         setPhone(userInfo.phone);
-        setSchool(userInfo.school);
-        setExamYear(userInfo.examYear);
-        setMedia(userInfo.media);
-        setStream(userInfo.stream);
-        setGurdiandName(userInfo.gurdianName);
-        setGurdianPhone(userInfo.gurdianPhone);
         setAddress(userInfo.address);
       };
 

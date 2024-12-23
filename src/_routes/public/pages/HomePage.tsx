@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { logout } from "@/firebase/api";
+import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
@@ -13,6 +14,12 @@ const HomePage = () => {
       console.log(error);
     }
   };
+
+
+  toast({
+    title: "Exam created successfully",
+    variant: "default",
+  });
 
   return (
     <div>

@@ -83,3 +83,28 @@ export type ExamDataType = {
 //   examStatus: "pending" | "completed";
 //   result: number;
 // };
+
+
+
+// -------------------------------
+
+export type TransactionType = "currency_exchange" | "investment"
+
+export interface Transaction {
+  id: number;
+  user_id: number;
+  amount: number;
+  transaction_type: TransactionType;
+  created_at: Date;
+}
+
+export type InvestmentType = "basic" | "growth" | "advanced";
+
+export interface Investment {
+  id: number;
+  user_id: number;
+  investment_type: InvestmentType;
+  initial_amount: number;
+  monthly_contribution: number;
+  created_at: Date;
+}

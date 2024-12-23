@@ -11,6 +11,7 @@ import { sendMessage } from "@/firebase/api";
 import { useAuth } from "@/hooks/useAuth";
 import { UserDataType } from "@/types";
 import { useState } from "react";
+import { toast } from "@/hooks/use-toast";
 
 type SendMessageProps = {
   openSendMessagePopup: boolean;
@@ -36,6 +37,11 @@ const SendMessage = ({
 
       setMessageContent("");
       setOpenSendMessagePopup(false);
+
+      toast({
+        title: "Message Sent Successfully",
+        variant: "default",
+      });
 
       setLoading(false);
     } catch (error) {

@@ -1,16 +1,56 @@
-import {  ChartSpline, Layout,  NotebookPen,  User, Users } from "lucide-react";
+import {
+  Bell,
+  ChartSpline,
+  DollarSign,
+  Layout,
+  NotebookPen,
+  Settings,
+  User,
+  Users,
+  Wallet,
+  Wallet2Icon,
+} from "lucide-react";
 import SidebarItem from "./SidebarItem";
 import { useLocation } from "react-router-dom";
 
 const guestRoutes = [
   { icon: Layout, label: "Dashboard", href: "/dashboard" },
   { icon: User, label: "Profile", href: "/dashboard/profile" },
+  {
+    icon: DollarSign,
+    label: "Currency Exchange",
+    href: "/dashboard/currency-exchange",
+  },
+  {
+    icon: Wallet,
+    label: "Add Investment",
+    href: "/dashboard/investments/add",
+  },
+  {
+    icon: Wallet2Icon,
+    label: "Investment Details",
+    href: "/dashboard/investments/:investmentId",
+  },
 ];
 
 const teacherRoutes = [
+  { icon: Layout, label: "Admin Dashboard", href: "/admin" },
   { icon: Users, label: "Clients", href: "/admin/users" },
+  {
+    icon: NotebookPen,
+    label: "Manage Investments",
+    href: "/admin/investments",
+  },
+  {
+    icon: DollarSign,
+    label: "Currency Exchange",
+    href: "/admin/currency-exchange",
+  },
   { icon: ChartSpline, label: "Analytics", href: "/admin/analytics" },
-  { icon: NotebookPen, label: "Exams", href: "/admin/exams" },
+  { icon: Wallet, label: "Transactions", href: "/admin/transactions" },
+  { icon: Bell, label: "Notifications", href: "/admin/notifications" },
+  { icon: Settings, label: "Settings", href: "/admin/settings" },
+  { icon: User, label: "Profile", href: "/admin/profile" },
 ];
 
 const SidebarRoutes = () => {
