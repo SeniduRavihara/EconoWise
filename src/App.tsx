@@ -47,14 +47,13 @@ const router = createBrowserRouter(
       </Route>
 
       {/* Private Routes */}
-      <Route element={<PrivateLayout />}>
-        <Route path="/dashboard" element={<DashboardPage />}>
-          <Route path="profile" element={<UserProfilePage />} />
-          <Route path="currency-exchange" element={<CurrencyExchangePage />} />
-          <Route path="investments" element={<InvestmentsPage />}>
-            <Route path="add" element={<AddInvestmentPage />} />
-            <Route path=":investmentId" element={<InvestmentDetailsPage />} />
-          </Route>
+      <Route path="/dashboard" element={<PrivateLayout />}>
+        <Route index element={<DashboardPage />} />
+        <Route path="profile" element={<UserProfilePage />} />
+        <Route path="currency-exchange" element={<CurrencyExchangePage />} />
+        <Route path="investments" element={<InvestmentsPage />}>
+          <Route path="add" element={<AddInvestmentPage />} />
+          <Route path=":investmentId" element={<InvestmentDetailsPage />} />
         </Route>
       </Route>
 

@@ -5,10 +5,10 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="h-full border-r flex flex-col overflow-auto shadow-sm relative bg-blue-400">
+    <div className="h-full border-r flex flex-col overflow-auto shadow-sm relative ">
       <div className="p-6 h-20 flex items-center justify-center">
         <span
-          className="cursor-pointer text-[#E2F1E7] text-[40px] font-extrabold"
+          className="cursor-pointer text-[#E2F1E7] text-[35px] font-extrabold"
           onClick={() => navigate("/")}
         >
           EconoWise
