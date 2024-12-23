@@ -14,25 +14,14 @@ export type AuthContextType = {
 export type UserDataType = {
   firstName: string;
   lastName: string;
-  whatsapp: string;
   nic: string;
   bDate: Date | undefined;
   phone: string;
-  school: string;
-  examYear: string;
-  media: string;
-  stream: string;
-  gurdianName: string;
-  gurdianPhone: string;
   address: string;
   uid: string;
   userName: string;
-  regNo: string | null;
-  roles: "ADMIN" | "STUDENT";
-  registered: boolean;
+  roles: "ADMIN" | "CLIENT";
   email: string;
-  lastResult: number | null;
-  lastRank: number;
 };
 
 // export type CurrentUserDataType = {
@@ -40,7 +29,7 @@ export type UserDataType = {
 //   userName: string;
 //   regNo: string | null;
 //   // gender: "male" | "female";
-//   roles: "ADMIN" | "STUDENT";
+//   roles: "ADMIN" | "CLIENT";
 //   registered: boolean;
 //   email: string;
 //   lastResult: number | null;
@@ -49,35 +38,23 @@ export type UserDataType = {
 export type UserDataInAdminType = {
   uid: string;
   userName: string;
-  regNo: string;
-  // gender: "male" | "female";
-  roles: "ADMIN" | "STUDENT";
-  registered: boolean;
+  roles: "ADMIN" | "CLIENT";
   email: string;
-  lastResult: number | null;
 };
 
 export type UserInfoType = {
   firstName: string;
   lastName: string;
-  whatsapp: string;
   nic: string;
   bDate: Date | undefined;
   phone: string;
-  school: string;
-  examYear: string;
-  media: string;
-  stream: string;
-  gurdianName: string;
-  gurdianPhone: string;
   address: string;
 };
 
-export type StudentTable = {
-  indexNo: string;
+export type ClientTable = {
   name: string;
   email: string;
-  lastResult: number;
+  uid: string;
 };
 
 export type ExamTable = {

@@ -6,7 +6,14 @@ import {
   User,
 } from "firebase/auth";
 import { auth, db, provider } from "./config";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { UserDataType } from "@/types";
 
 export const logout = async () => {
@@ -53,19 +60,20 @@ export const signup = async ({
       email,
       password
     );
-    console.log(userCredential);
+    // console.log(userCredential);
     const user = userCredential.user;
 
     const payload = {
-      name: "",
-      id: "",
+      uid: "",
+      userName: "",
       email: "",
+      roles: "CLIENT",
     };
 
     await setDoc(doc(db, "users", user.uid), {
       ...payload,
-      id: user.uid,
-      name,
+      uid: user.uid,
+      userName: name,
       email,
     });
   } catch (error) {
@@ -77,27 +85,29 @@ export const signup = async ({
 export const googleSignIn = async () => {
   try {
     const userCredential = await signInWithPopup(auth, provider);
-    console.log(userCredential);
+    // console.log(userCredential);
 
     const user = userCredential.user;
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
 
     if (!userDoc.exists()) {
-      const userData = {
-        name: user.displayName || "",
-        email: user.email || "",
+      const payload = {
         uid: user.uid,
+        userName: user.displayName || "",
+        email: user.email || "",
+        roles: "CLIENT",
       };
 
-      await setDoc(userDocRef, userData);
+      await setDoc(userDocRef, payload);
     }
+
+    return user;
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
-
 
 // --------------------------------------------------
 
@@ -117,5 +127,28 @@ export const featchCurrentUserData = async (currentUser: User) => {
   } catch (error) {
     console.error(error);
     throw error;
+  }
+};
+
+// --------------------------------------------------
+
+export const sendMessage = async (
+  selectedUser: UserDataType,
+  messageContent: string,
+  adminUserId: string
+) => {
+  const userDocRef = collection(db, "users", selectedUser.uid, "messages");
+  const payload = {
+    senderId: adminUserId,
+    receiverId: selectedUser.uid,
+    message: messageContent,
+    timestamp: serverTimestamp(),
+  };
+  try {
+    await addDoc(userDocRef, payload);
+
+    console.log("Message sent successfully!");
+  } catch (error) {
+    console.error("Error sending message:", error);
   }
 };
