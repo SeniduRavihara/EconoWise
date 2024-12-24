@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { logout } from "@/firebase/api";
 import { useData } from "@/hooks/useData";
+import ProfileDropdown from "@/components/ProfileDropdown";
 
 type CardProps = {
   title: string;
@@ -11,17 +12,7 @@ type CardProps = {
 };
 
 const HomePage: React.FC = () => {
-  const { currentUserData } = useData();
   const navigate = useNavigate();
-
-  const handleLogout = async (): Promise<void> => {
-    try {
-      await logout(); // Assumes `logout` is implemented in Firebase API
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -29,17 +20,8 @@ const HomePage: React.FC = () => {
       <header className="bg-blue-600 text-white py-4">
         <div className="container mx-auto flex justify-between items-center px-4">
           <h1 className="text-2xl font-bold">Finance Management App</h1>
-          {currentUserData?.roles.includes("ADMIN") && (
-            <Link to="/admin">
-              <Button>Admin Dashboard</Button>
-            </Link>
-          )}
-          <Button
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-            onClick={handleLogout}
-          >
-            Logout
-          </Button>
+
+          <ProfileDropdown />
         </div>
       </header>
 
