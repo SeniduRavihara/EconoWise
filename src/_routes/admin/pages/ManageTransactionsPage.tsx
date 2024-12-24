@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { collection, getDocs, query, orderBy, where } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/firebase/config";
 
 const ManageTransactionsPage = () => {
-  const [transactions, setTransactions] = useState([]);
+  interface Transaction {
+    id: string;
+    user: string;
+    amount: number;
+    type: string;
+    timestamp: any;
+  }
+
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [filter, setFilter] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -17,10 +25,16 @@ const ManageTransactionsPage = () => {
         const q = query(collectionRef, orderBy("timestamp", "desc"));
 
         const querySnapshot = await getDocs(q);
-        const transactionsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const transactionsData = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            user: data.user,
+            amount: data.amount,
+            type: data.type,
+            timestamp: data.timestamp,
+          };
+        });
         setTransactions(transactionsData);
       } catch (error) {
         console.error("Error fetching transactions:", error);

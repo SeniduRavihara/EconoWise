@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 
 const SystemSettingsPage = () => {
   const [formData, setFormData] = useState({
@@ -8,7 +8,7 @@ const SystemSettingsPage = () => {
     theme: "light",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -16,7 +16,7 @@ const SystemSettingsPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:any) => {
     e.preventDefault();
     console.log("Updated Settings:", formData);
     alert("Settings saved successfully!");

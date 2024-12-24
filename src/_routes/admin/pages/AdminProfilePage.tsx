@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 
 const AdminProfilePage = () => {
   const [formData, setFormData] = useState({
@@ -6,36 +6,36 @@ const AdminProfilePage = () => {
     email: "admin@example.com",
     profilePicture: null,
   });
-  const [previewImage, setPreviewImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e:any) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e:any) => {
     const { name, value } = e.target;
     setPasswordData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = (e:any) => {
     const file = e.target.files[0];
     setFormData((prev) => ({ ...prev, profilePicture: file }));
     setPreviewImage(URL.createObjectURL(file));
   };
 
-  const handleProfileSubmit = (e) => {
+  const handleProfileSubmit = (e:any) => {
     e.preventDefault();
     console.log("Profile updated:", formData);
     alert("Profile updated successfully!");
   };
 
-  const handlePasswordSubmit = (e) => {
+  const handlePasswordSubmit = (e:any) => {
     e.preventDefault();
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       alert("New password and confirmation do not match!");

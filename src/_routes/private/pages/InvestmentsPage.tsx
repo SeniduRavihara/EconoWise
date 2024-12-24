@@ -152,7 +152,8 @@ const InvestmentPage: React.FC = () => {
         <label className="block text-lg font-medium text-gray-700 mb-2">
           Investment Plan
         </label>
-        <Select value={investmentType} onValueChange={setInvestmentType}>
+
+        <Select value={investmentType} onValueChange={(value) => setInvestmentType(value as InvestmentType)}>
           <SelectTrigger className="w-full p-3 border-2 border-gray-300 rounded-lg shadow-sm">
             <SelectValue placeholder="Select investment plan" />
           </SelectTrigger>

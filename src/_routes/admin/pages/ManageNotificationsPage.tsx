@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   collection,
   addDoc,
@@ -8,7 +8,14 @@ import {
 import { db } from "@/firebase/config";
 
 const ManageNotificationsPage = () => {
-  const [notifications, setNotifications] = useState([]);
+  interface Notification {
+    id: string;
+    title: string;
+    message: string;
+    createdAt: Date;
+  }
+  
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [newNotification, setNewNotification] = useState({
     title: "",
     message: "",
@@ -19,10 +26,15 @@ const ManageNotificationsPage = () => {
     const fetchNotifications = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "notifications"));
-        const notificationsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const notificationsData = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            title: data.title,
+            message: data.message,
+            createdAt: data.createdAt.toDate(),
+          };
+        });
         setNotifications(notificationsData);
       } catch (error) {
         console.error("Error fetching notifications:", error);
@@ -33,7 +45,7 @@ const ManageNotificationsPage = () => {
   }, []);
 
   // Handle input changes for new notification
-  const handleInputChange = (e) => {
+  const handleInputChange = (e:any) => {
     const { name, value } = e.target;
     setNewNotification((prev) => ({
       ...prev,
@@ -42,7 +54,7 @@ const ManageNotificationsPage = () => {
   };
 
   // Handle form submission to create a new notification
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = async (e:any) => {
     e.preventDefault();
 
     if (!newNotification.title.trim() || !newNotification.message.trim()) {
@@ -131,7 +143,7 @@ const ManageNotificationsPage = () => {
                 <p className="text-sm text-gray-600">{notification.message}</p>
                 <p className="text-xs text-gray-400">
                   {new Date(
-                    notification.createdAt?.toDate() || Date.now()
+                    notification.createdAt || Date.now()
                   ).toLocaleString()}
                 </p>
               </li>
