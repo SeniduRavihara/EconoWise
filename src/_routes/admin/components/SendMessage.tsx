@@ -33,7 +33,11 @@ const SendMessage = ({
     if (!selectedUser || !messageContent.trim()) return;
     setLoading(true);
     try {
-      await sendMessage(selectedUser, messageContent, currentUser?.uid || "");
+      await sendMessage(
+        selectedUser.uid,
+        messageContent,
+        currentUser?.uid || ""
+      );
 
       setMessageContent("");
       setOpenSendMessagePopup(false);

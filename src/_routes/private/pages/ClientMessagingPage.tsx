@@ -4,41 +4,53 @@ import {
   onSnapshot,
   addDoc,
   serverTimestamp,
+  query,
+  orderBy,
 } from "firebase/firestore";
 import { db } from "@/firebase/config";
 import { useAuth } from "@/hooks/useAuth";
+import { MessageType } from "@/types";
+import { addMessageByClient, sendMessage } from "@/firebase/api";
 
 const ClientMessagingPage: React.FC = () => {
-  const { user } = useAuth(); // Assume the user is logged in
-  const [messages, setMessages] = useState<Array<any>>([]);
+  const { currentUser } = useAuth();
+  const [messages, setMessages] = useState<Array<MessageType>>([]);
   const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
-    const chatId = `admin-${user.uid}`;
-    const chatRef = collection(db, "chats", chatId, "messages");
+    if (currentUser?.uid) {
+      const collectionRef = collection(
+        db,
+        "users",
+        currentUser.uid,
+        "messages"
+      );
 
-    const unsubscribe = onSnapshot(chatRef, (snapshot) => {
-      const fetchedMessages = snapshot.docs.map((doc) => doc.data());
-      setMessages(fetchedMessages);
-    });
+      const q = query(collectionRef, orderBy("timestamp", "asc"));
 
-    return () => unsubscribe();
-  }, [user.uid]);
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const userMessageArr = querySnapshot.docs.map((doc) => ({
+          ...(doc.data() as MessageType),
+          uid: doc.id,
+        })) as MessageType[];
 
+        setMessages(userMessageArr);
+        console.log(userMessageArr);
+      });
+
+      return unsubscribe;
+    }
+  }, [currentUser]);
+  // Send message
   const handleSendMessage = async () => {
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() || !currentUser) return;
 
-    const chatId = `admin-${user.uid}`;
-    const chatRef = collection(db, "chats", chatId, "messages");
-
-    await addDoc(chatRef, {
-      senderId: user.uid,
-      text: newMessage,
-      timestamp: serverTimestamp(),
-    });
+    await addMessageByClient("admin", newMessage, currentUser.uid);
 
     setNewMessage("");
   };
+
+  if(!currentUser) return <>Loading...</>;
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
@@ -50,17 +62,17 @@ const ClientMessagingPage: React.FC = () => {
           <div
             key={index}
             className={`mb-4 ${
-              message.senderId === user.uid ? "text-right" : "text-left"
+              message.senderId === currentUser.uid ? "text-right" : "text-left"
             }`}
           >
             <p
               className={`inline-block p-2 rounded ${
-                message.senderId === user.uid
+                message.senderId === currentUser.uid
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200"
               }`}
             >
-              {message.text}
+              {message.message}
             </p>
             <div className="text-xs text-gray-500">
               {new Date(message.timestamp?.toDate()).toLocaleTimeString()}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "@/firebase/config";
-import { fetchAllMessages, getAllUsers, sendMessage } from "@/firebase/api";
+import { getAllUsers, sendMessage } from "@/firebase/api";
 import { MessageType, UserDataType } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -10,7 +10,7 @@ const AdminMessagingPage: React.FC = () => {
 
   const [users, setUsers] = useState<Array<UserDataType>>([]);
   const [selectedUser, setSelectedUser] = useState<UserDataType | null>(null);
-  const [messages, setMessages] = useState<Array<any>>([]);
+  const [messages, setMessages] = useState<Array<MessageType>>([]);
   const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
@@ -22,7 +22,9 @@ const AdminMessagingPage: React.FC = () => {
         "messages"
       );
 
-      const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
+      const q = query(collectionRef, orderBy("timestamp", "asc"));
+
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const userMessageArr = querySnapshot.docs.map((doc) => ({
           ...(doc.data() as MessageType),
           uid: doc.id,
@@ -46,7 +48,6 @@ const AdminMessagingPage: React.FC = () => {
     fetchUsers();
   }, []);
 
-
   // Send message
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedUser) return;
@@ -54,10 +55,12 @@ const AdminMessagingPage: React.FC = () => {
 
     console.log("Sending message to", newMessage);
 
-    await sendMessage(selectedUser, newMessage, currentUser.uid);
+    await sendMessage(selectedUser.uid, newMessage, currentUser.uid);
 
     setNewMessage("");
   };
+
+  if (!currentUser) return <div>Loading...</div>;
 
   return (
     <div className="flex h-[500px]">
@@ -91,12 +94,14 @@ const AdminMessagingPage: React.FC = () => {
                 <div
                   key={index}
                   className={`mb-4 ${
-                    message.senderId === "admin" ? "text-right" : "text-left"
+                    message.senderId === currentUser.uid
+                      ? "text-right"
+                      : "text-left"
                   }`}
                 >
                   <p
                     className={`inline-block p-2 rounded ${
-                      message.senderId === "admin"
+                      message.senderId === currentUser.uid
                         ? "bg-blue-500 text-white"
                         : "bg-gray-200"
                     }`}
@@ -109,6 +114,7 @@ const AdminMessagingPage: React.FC = () => {
                 </div>
               ))}
             </div>
+
             <div className="p-4 flex items-center border-t">
               <input
                 type="text"

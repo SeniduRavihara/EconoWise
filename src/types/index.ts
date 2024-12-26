@@ -114,5 +114,5 @@ export type MessageType = {
   senderId: string;
   message: string;
   timestamp: Timestamp;
-  receiverId: string;
+  receiverId?: string;
 };

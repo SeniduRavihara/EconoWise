@@ -134,14 +134,38 @@ export const featchCurrentUserData = async (currentUser: User) => {
 // --------------------------------------------------
 
 export const sendMessage = async (
-  selectedUser: UserDataType,
+  receiverId: string,
   messageContent: string,
   senderId: string
 ) => {
-  const userDocRef = collection(db, "users", selectedUser.uid, "messages");
+  const userDocRef = collection(db, "users", receiverId, "messages");
   const payload = {
     senderId: senderId,
-    receiverId: selectedUser.uid,
+    receiverId: receiverId,
+    message: messageContent,
+    timestamp: serverTimestamp(),
+  };
+
+  try {
+    await addDoc(userDocRef, payload);
+
+    console.log("Message sent successfully!");
+  } catch (error) {
+    console.error("Error sending message:", error);
+  }
+};
+
+// --------------------------------------------------------
+
+export const addMessageByClient = async (
+  receiverId: string,
+  messageContent: string,
+  senderId: string
+) => {
+  const userDocRef = collection(db, "users", senderId, "messages");
+  const payload = {
+    senderId: senderId,
+    receiverId: receiverId,
     message: messageContent,
     timestamp: serverTimestamp(),
   };
