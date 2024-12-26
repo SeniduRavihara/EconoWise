@@ -31,6 +31,8 @@ import SystemSettingsPage from "./_routes/admin/pages/SystemSettingsPage";
 import AdminProfilePage from "./_routes/admin/pages/AdminProfilePage";
 import RootLayout from "./_routes/RootLayout";
 import DataContextProvider from "./context/DataContext";
+import AdminMessagingPage from "./_routes/admin/pages/AdminMessagingPage";
+import ClientMessagingPage from "./_routes/private/pages/ClientMessagingPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -51,6 +53,7 @@ const router = createBrowserRouter(
         <Route index element={<DashboardPage />} />
         <Route path="profile" element={<UserProfilePage />} />
         <Route path="currency-exchange" element={<CurrencyExchangePage />} />
+        <Route path="messaging" element={<ClientMessagingPage />} />;
         <Route path="investments" element={<InvestmentsPage />}>
           <Route path="add" element={<AddInvestmentPage />} />
           <Route path=":investmentId" element={<InvestmentDetailsPage />} />
@@ -77,6 +80,7 @@ const router = createBrowserRouter(
         <Route path="notifications" element={<ManageNotificationsPage />} />
         <Route path="settings" element={<SystemSettingsPage />} />
         <Route path="profile" element={<AdminProfilePage />} />
+        <Route path="messaging" element={<AdminMessagingPage />} />
       </Route>
     </Route>
   )

@@ -11,10 +11,11 @@ import {
   collection,
   doc,
   getDoc,
+  getDocs,
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
-import { UserDataType } from "@/types";
+import { MessageType, UserDataType } from "@/types";
 
 export const logout = async () => {
   try {
@@ -135,15 +136,16 @@ export const featchCurrentUserData = async (currentUser: User) => {
 export const sendMessage = async (
   selectedUser: UserDataType,
   messageContent: string,
-  adminUserId: string
+  senderId: string
 ) => {
   const userDocRef = collection(db, "users", selectedUser.uid, "messages");
   const payload = {
-    senderId: adminUserId,
+    senderId: senderId,
     receiverId: selectedUser.uid,
     message: messageContent,
     timestamp: serverTimestamp(),
   };
+
   try {
     await addDoc(userDocRef, payload);
 
@@ -151,4 +153,30 @@ export const sendMessage = async (
   } catch (error) {
     console.error("Error sending message:", error);
   }
+};
+
+// --------------------------------------------------------
+
+export const getAllUsers = async () => {
+  const usersSnapshot = await getDocs(collection(db, "users"));
+  const usersData = usersSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...(doc.data() as UserDataType),
+  })) as UserDataType[];
+
+  // console.log("All users fetched successfully", usersData);
+  return usersData;
+};
+
+// --------------------------------------------------------
+
+export const fetchAllMessages = async (selectedUser: UserDataType) => {
+  const userDocRef = collection(db, "users", selectedUser.uid, "messages");
+  const messagesSnapshot = await getDocs(userDocRef);
+  const messagesData = messagesSnapshot.docs.map((doc) =>
+    doc.data()
+  ) as MessageType[];
+
+  console.log("All messages fetched successfully", messagesData);
+  return messagesData;
 };

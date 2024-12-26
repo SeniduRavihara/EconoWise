@@ -1,5 +1,6 @@
 import { User } from "firebase/auth";
 import React from "react";
+import { serverTimestamp, Timestamp } from "firebase/firestore";
 
 export type DataContextType = {
   currentUserData: UserDataType | null;
@@ -84,11 +85,9 @@ export type ExamDataType = {
 //   result: number;
 // };
 
-
-
 // -------------------------------
 
-export type TransactionType = "currency_exchange" | "investment"
+export type TransactionType = "currency_exchange" | "investment";
 
 export interface Transaction {
   id: number;
@@ -108,3 +107,12 @@ export interface Investment {
   monthly_contribution: number;
   created_at: Date;
 }
+
+// -------------------------------
+
+export type MessageType = {
+  senderId: string;
+  message: string;
+  timestamp: Timestamp;
+  receiverId: string;
+};

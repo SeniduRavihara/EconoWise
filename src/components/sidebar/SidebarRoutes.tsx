@@ -3,6 +3,7 @@ import {
   ChartSpline,
   DollarSign,
   Layout,
+  MessageCircle,
   NotebookPen,
   Settings,
   User,
@@ -13,7 +14,7 @@ import {
 import SidebarItem from "./SidebarItem";
 import { useLocation } from "react-router-dom";
 
-const guestRoutes = [
+const clientRoutes = [
   { icon: Layout, label: "Dashboard", href: "/dashboard" },
   { icon: User, label: "Profile", href: "/dashboard/profile" },
   {
@@ -31,9 +32,10 @@ const guestRoutes = [
     label: "Investment Details",
     href: "/dashboard/investments/:investmentId",
   },
+  { icon: MessageCircle, label: "Messaging", href: "/dashboard/messaging" },
 ];
 
-const teacherRoutes = [
+const adminRoutes = [
   { icon: Layout, label: "Admin Dashboard", href: "/admin" },
   { icon: Users, label: "Clients", href: "/admin/users" },
   {
@@ -51,13 +53,14 @@ const teacherRoutes = [
   { icon: Bell, label: "Notifications", href: "/admin/notifications" },
   { icon: Settings, label: "Settings", href: "/admin/settings" },
   { icon: User, label: "Profile", href: "/admin/profile" },
+  { icon: MessageCircle, label: "Messaging", href: "/admin/messaging" },
 ];
 
 const SidebarRoutes = () => {
   const location = useLocation();
   const isTeacherPage = location.pathname.includes("/admin");
 
-  const routes = isTeacherPage ? teacherRoutes : guestRoutes;
+  const routes = isTeacherPage ? adminRoutes : clientRoutes;
 
   return (
     <div className="flex flex-col w-full">
