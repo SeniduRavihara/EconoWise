@@ -2,15 +2,13 @@ import React, { useState, useEffect } from "react";
 import {
   collection,
   onSnapshot,
-  addDoc,
-  serverTimestamp,
   query,
   orderBy,
 } from "firebase/firestore";
 import { db } from "@/firebase/config";
 import { useAuth } from "@/hooks/useAuth";
 import { MessageType } from "@/types";
-import { addMessageByClient, sendMessage } from "@/firebase/api";
+import { addMessageByClient } from "@/firebase/api";
 
 const ClientMessagingPage: React.FC = () => {
   const { currentUser } = useAuth();
@@ -53,7 +51,7 @@ const ClientMessagingPage: React.FC = () => {
   if(!currentUser) return <>Loading...</>;
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
+    <div className="flex flex-col h-[500px] bg-gray-100">
       <div className="p-4 bg-blue-600 text-white">
         <h2>Chat with Admin</h2>
       </div>

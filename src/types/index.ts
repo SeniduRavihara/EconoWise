@@ -1,6 +1,6 @@
 import { User } from "firebase/auth";
 import React from "react";
-import { serverTimestamp, Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 
 export type DataContextType = {
   currentUserData: UserDataType | null;
