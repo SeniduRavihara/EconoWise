@@ -30,7 +30,7 @@ const PrivateLayout = () => {
   //   return <Navigate to="/register-as-new" />;
   // }
 
-  if (!token) return <Navigate to="/" />;
+  if (!token) return <Navigate to="/login" />;
 
   return (
     <div className="">

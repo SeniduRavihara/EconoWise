@@ -16,7 +16,7 @@ const HomePage: React.FC = () => {
       {/* Header */}
       <header className="bg-blue-600 text-white py-4">
         <div className="container mx-auto flex justify-between items-center px-4">
-          <h1 className="text-2xl font-bold">Finance Management App</h1>
+          <h1 className="text-2xl font-bold">EconoWise</h1>
 
           <ProfileDropdown />
         </div>
@@ -70,8 +70,7 @@ const HomePage: React.FC = () => {
       {/* Footer */}
       <footer className="bg-gray-200 py-4">
         <div className="container mx-auto text-center text-gray-600">
-          © {new Date().getFullYear()} Finance Management App. All Rights
-          Reserved.
+          © {new Date().getFullYear()} EconoWise. All Rights Reserved.
         </div>
       </footer>
     </div>

@@ -23,7 +23,7 @@ const ProfileDropdown = () => {
       {!currentUser ? (
         <Link
           to="/login"
-          className="rounded-md text-black font-semibold
+          className="rounded-md text-white font-semibold
            text-xs md:text-base flex gap-2 no-underline"
           //  style={{textDecoration: "none"}}
         >

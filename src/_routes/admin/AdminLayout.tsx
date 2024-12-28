@@ -34,7 +34,7 @@ const AdminLayout = () => {
 
   const token = localStorage.getItem("token");
 
-  if (!token) return <Navigate to="/" />;
+  if (!token) return <Navigate to="/login" />;
 
   if (!currentUserData) {
     return (
