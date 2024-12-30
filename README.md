@@ -1,50 +1,80 @@
-# React + TypeScript + Vite
+# Finovate Advisory Group Web Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Table of Contents
 
-Currently, two official plugins are available:
+1. [Project Overview](#project-overview)
+2. [Features](#features)
+3. [Technology Stack](#technology-stack)
+4. [Project Structure](#project-structure)
+5. [Installation](#installation)
+6. [Usage](#usage)
+7. [Deployment](#deployment)
+8. [Cost Analysis](#cost-analysis)
+9. [Feasibility Study Impact](#feasibility-study-impact)
+10. [License](#license)
+11. [Contact Information](#contact-information)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Project Overview
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+The **Finovate Advisory Group Web Application** is a modern, web-based platform designed to enhance financial advisory services. It offers tools for currency exchange, investment calculations, and secure client data management. The project leverages cloud-based technologies for scalability, reliability, and ease of integration.
 
-- Configure the top-level `parserOptions` property like this:
+This platform aims to:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- Improve operational efficiency for staff.
+- Provide clients with easy access to essential financial tools.
+- Ensure compliance with data security and financial regulations.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+---
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Features
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### Core Features
+
+- **Currency Exchange System**:
+  - Real-time currency conversion.
+  - Historical exchange rate data.
+- **Investment Calculator**:
+  - Tools to simulate investment outcomes.
+  - Support for multiple financial scenarios.
+- **Secure Client Data Management**:
+  - Cloud-based storage for client information.
+  - Role-based access for added security.
+
+### Additional Features
+
+- Responsive design using TailwindCSS.
+- Firebase-based authentication for secure logins.
+- Firebase hosting for scalable deployment.
+
+---
+
+## Technology Stack
+
+### Frontend
+
+- **React**: Modular, reusable components for the user interface.
+- **TailwindCSS**: Utility-first CSS framework for responsive and efficient styling.
+
+### Backend
+
+- **Firebase**:
+  - Firestore for real-time database operations.
+  - Authentication for secure user login and management.
+  - Cloud Functions for server-side logic.
+  - Hosting for scalable application deployment.
+
+---
+
+## Project Structure
+
+```plaintext
+src/
+├── components/        # Reusable React components
+├── pages/             # Application pages
+├── firebase/          # Firebase configuration and service files
+├── utils/             # Utility functions
+├── styles/            # Global and custom TailwindCSS styles
+└── assets/            # Images, icons, and static assets
 ```
