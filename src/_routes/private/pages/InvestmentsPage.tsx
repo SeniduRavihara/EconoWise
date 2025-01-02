@@ -6,8 +6,17 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { ArrowBigRight } from "lucide-react";
 
-// Types for investment plan options
 type InvestmentType =
   | "Basic Savings Plan"
   | "Growth Savings Plan"
@@ -20,7 +29,6 @@ interface ProjectionData {
   fees: string;
 }
 
-// Investment plan data
 const investmentPlans = {
   "Basic Savings Plan": {
     maxInvestment: 25000,
@@ -46,7 +54,6 @@ const investmentPlans = {
 };
 
 const InvestmentPage: React.FC = () => {
-  // State variables
   const [initialInvestment, setInitialInvestment] = useState<number>(1000);
   const [monthlyContribution, setMonthlyContribution] = useState<number>(100);
   const [investmentType, setInvestmentType] =
@@ -55,13 +62,11 @@ const InvestmentPage: React.FC = () => {
     [key: string]: ProjectionData;
   } | null>(null);
   const [error, setError] = useState<string>("");
+  const [openProceedDialog, setOpenProceedDialog] = useState<boolean>(false);
 
-  // Handle calculation logic
   const handleCalculate = () => {
-    // Retrieve investment plan details
     const plan = investmentPlans[investmentType];
 
-    // Input validation
     if (
       initialInvestment <= 0 ||
       monthlyContribution < plan.minMonthly ||
@@ -73,10 +78,8 @@ const InvestmentPage: React.FC = () => {
       return;
     }
 
-    // Reset error message
     setError("");
 
-    // Function to calculate projections for a given number of years
     const calculateProjection = (years: number): ProjectionData => {
       const annualRate =
         plan.returnRate.reduce(
@@ -87,7 +90,7 @@ const InvestmentPage: React.FC = () => {
 
       for (let i = 0; i < years; i++) {
         totalAmount += totalAmount * annualRate + monthlyContribution * 12;
-        totalAmount -= totalAmount * plan.monthlyFee; // Monthly fee
+        totalAmount -= totalAmount * plan.monthlyFee;
       }
 
       const totalProfit =
@@ -103,7 +106,6 @@ const InvestmentPage: React.FC = () => {
       };
     };
 
-    // Calculate projections for 1, 3, and 10 years
     const projections = {
       "1 Year": calculateProjection(1),
       "3 Years": calculateProjection(3),
@@ -114,12 +116,11 @@ const InvestmentPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <div className="max-w-4xl lg:w-[85%] mt-5 mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-3xl font-semibold text-center text-gray-700 mb-6">
         Investment Calculator
       </h2>
 
-      {/* Initial Investment Input */}
       <div className="mb-4">
         <label className="block text-lg font-medium text-gray-700 mb-2">
           Initial Investment (£)
@@ -133,7 +134,6 @@ const InvestmentPage: React.FC = () => {
         />
       </div>
 
-      {/* Monthly Contribution Input */}
       <div className="mb-4">
         <label className="block text-lg font-medium text-gray-700 mb-2">
           Monthly Contribution (£)
@@ -147,13 +147,14 @@ const InvestmentPage: React.FC = () => {
         />
       </div>
 
-      {/* Investment Plan Dropdown */}
       <div className="mb-4">
         <label className="block text-lg font-medium text-gray-700 mb-2">
           Investment Plan
         </label>
-
-        <Select value={investmentType} onValueChange={(value) => setInvestmentType(value as InvestmentType)}>
+        <Select
+          value={investmentType}
+          onValueChange={(value) => setInvestmentType(value as InvestmentType)}
+        >
           <SelectTrigger className="w-full p-3 border-2 border-gray-300 rounded-lg shadow-sm">
             <SelectValue placeholder="Select investment plan" />
           </SelectTrigger>
@@ -167,7 +168,6 @@ const InvestmentPage: React.FC = () => {
         </Select>
       </div>
 
-      {/* Calculate Button */}
       <button
         onClick={handleCalculate}
         className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -175,10 +175,8 @@ const InvestmentPage: React.FC = () => {
         Calculate Projections
       </button>
 
-      {/* Error Message */}
       {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
 
-      {/* Projection Results */}
       {projectionData && !error && (
         <div className="mt-6">
           <h3 className="text-2xl font-medium text-gray-700 mb-4">
@@ -205,8 +203,47 @@ const InvestmentPage: React.FC = () => {
               </div>
             </div>
           ))}
+
+          <Button
+            className="text-xl px-5 py-5"
+            variant="destructive"
+            onClick={() => setOpenProceedDialog(true)}
+          >
+            <span>Save and Proceed </span>
+            <ArrowBigRight />
+          </Button>
         </div>
       )}
+
+      {/* Updated Dialog Content */}
+      <Dialog open={openProceedDialog} onOpenChange={setOpenProceedDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Investment</DialogTitle>
+            <DialogDescription>
+              You are about to proceed with the following details:
+              <ul className="list-disc list-inside mt-3">
+                <li>Plan: {investmentType}</li>
+                <li>Initial Investment: £{initialInvestment}</li>
+                <li>Monthly Contribution: £{monthlyContribution}</li>
+              </ul>
+              Are you sure you want to continue?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-start">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setOpenProceedDialog(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="button" onClick={() => console.log("Proceed!")}>
+              Confirm and Save
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

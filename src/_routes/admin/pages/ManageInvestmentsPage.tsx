@@ -97,7 +97,7 @@ const ManageInvestmentPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <div className="max-w-5xl lg:w-[90%] mt-5 mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-3xl font-semibold text-center text-gray-700 mb-6">
         Manage Investment Plans
       </h2>

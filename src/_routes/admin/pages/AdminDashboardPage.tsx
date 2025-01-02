@@ -1,3 +1,4 @@
+import { getUsersCount } from "@/firebase/api";
 import React, { useState, useEffect } from "react";
 
 // Types for the dashboard data
@@ -11,18 +12,16 @@ interface DashboardStats {
 const AdminDashboardPage: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats>({
     totalUsers: 0,
-    totalInvestments: 0,
-    activePlans: 0,
-    pendingApprovals: 0,
+    totalInvestments: 5,
+    activePlans: 20,
+    pendingApprovals: 3,
   });
 
   // Fetch the dashboard stats from an API (simulated here with dummy data)
   useEffect(() => {
     const fetchDashboardStats = async () => {
-      // Replace with actual API call
-      const response = await fetch("/api/dashboard-stats");
-      const data = await response.json();
-      setStats(data);
+      const userCount = await getUsersCount();
+      setStats((prevStats) => ({ ...prevStats, totalUsers: userCount }));
     };
 
     fetchDashboardStats();

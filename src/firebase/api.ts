@@ -204,3 +204,13 @@ export const fetchAllMessages = async (selectedUser: UserDataType) => {
   console.log("All messages fetched successfully", messagesData);
   return messagesData;
 };
+
+// --------------------------------------------------------
+
+export const getUsersCount = async () => {
+  const usersSnapshot = await getDocs(collection(db, "users"));
+  const usersCount = usersSnapshot.size;
+
+  console.log("Users count fetched successfully", usersCount);
+  return usersCount;
+}

@@ -36,7 +36,7 @@ const CurrencyExchangePage = () => {
           `https://api.exchangerate-api.com/v4/latest/${baseCurrency}`
         );
         setRates(response.data.rates);
-      } catch (error) {
+      } catch {
         setError("Error fetching exchange rates.");
       } finally {
         setLoading(false);
@@ -78,7 +78,7 @@ const CurrencyExchangePage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <div className="max-w-4xl lg:w-[85%] mt-5 mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-3xl font-semibold text-center text-gray-700 mb-6">
         Currency Exchange
       </h2>

@@ -71,13 +71,13 @@ const UserProfilePage: React.FC = () => {
       // If update is successful, switch back to view mode
       setIsEditing(false);
       setError("");
-    } catch (err) {
+    } catch {
       setError("An error occurred while updating the profile.");
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <div className="max-w-4xl lg:w-[85%] mt-5 mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-3xl font-semibold text-center text-gray-700 mb-6">
         User Profile
       </h2>
