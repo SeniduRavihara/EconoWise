@@ -12,7 +12,26 @@ const HomePage: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div
+      className="min-h-screen bg-gray-100 flex flex-col"
+      style={{
+        backgroundImage: "url('./bg1.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        
+      }}
+    >
+      {/* <div
+        className="absolute inset-0 w-screen h-screen z-10"
+        style={{
+          backgroundImage: "url('./bg1.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "blur(8px)",
+          zIndex: -1,
+        }}
+      >awseaw</div> */}
+
       {/* Header */}
       <header className="bg-blue-600 text-white py-4">
         <div className="container mx-auto flex justify-between items-center px-4">
@@ -23,11 +42,11 @@ const HomePage: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-grow container mx-auto mt-10 px-4">
-        <h2 className="text-2xl font-bold text-center mb-6">
-          Welcome to Your Dashboard
+      <main className="flex-grow container mx-auto mt-20 px-4">
+        <h2 className="text-5xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] font-extrabold text-center mb-6">
+          Streamline Your Financial Journey
         </h2>
-        <p className="text-center text-gray-600 mb-8">
+        <p className="text-center text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] text-white  mb-8">
           Manage your finances, track investments, and stay on top of your
           transactions.
         </p>
@@ -67,7 +86,7 @@ const HomePage: React.FC = () => {
         </div>
       </main>
 
-      {/* Footer */}
+      {/* Footer */} 
       <footer className="bg-gray-200 py-4">
         <div className="container mx-auto text-center text-gray-600">
           © {new Date().getFullYear()} EconoWise. All Rights Reserved.

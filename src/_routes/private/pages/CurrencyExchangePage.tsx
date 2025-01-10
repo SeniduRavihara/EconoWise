@@ -8,6 +8,9 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { db } from "@/firebase/config"; // Assuming you're using Firebase Firestore
+import { addDoc, collection } from "firebase/firestore";
 
 const CurrencyExchangePage = () => {
   const currencies = [
@@ -27,6 +30,7 @@ const CurrencyExchangePage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [rates, setRates] = useState<{ [key: string]: number }>({});
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const fetchRates = async () => {
@@ -77,13 +81,33 @@ const CurrencyExchangePage = () => {
     setLoading(false);
   };
 
+  const handleSaveTransaction = async () => {
+    setIsSaving(true);
+    try {
+      await addDoc(collection(db, "transactions"), {
+        baseCurrency,
+        targetCurrency,
+        amount,
+        convertedAmount,
+        fee,
+        status: "Pending", // Initial status
+        timestamp: new Date().toISOString(),
+      });
+      alert("Transaction saved successfully! Admin will contact you soon.");
+    } catch (error) {
+      console.error("Error saving transaction:", error);
+      alert("Failed to save transaction. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl lg:w-[85%] mt-5 mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-3xl font-semibold text-center text-gray-700 mb-6">
         Currency Exchange
       </h2>
 
-      {/* Base Currency Dropdown */}
       <div className="mb-4">
         <label className="block text-lg font-medium text-gray-700 mb-2">
           Base Currency
@@ -109,7 +133,6 @@ const CurrencyExchangePage = () => {
         </Select>
       </div>
 
-      {/* Target Currency Dropdown */}
       <div className="mb-4">
         <label className="block text-lg font-medium text-gray-700 mb-2">
           Target Currency
@@ -135,7 +158,6 @@ const CurrencyExchangePage = () => {
         </Select>
       </div>
 
-      {/* Amount Input */}
       <div className="mb-4">
         <label className="block text-lg font-medium text-gray-700 mb-2">
           Amount
@@ -150,7 +172,6 @@ const CurrencyExchangePage = () => {
         />
       </div>
 
-      {/* Convert Button */}
       <button
         onClick={handleConvert}
         className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -158,17 +179,8 @@ const CurrencyExchangePage = () => {
         Convert
       </button>
 
-      {/* Error Message */}
       {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
 
-      {/* Loading Spinner */}
-      {loading && (
-        <div className="flex justify-center mt-4">
-          <div className="w-16 h-16 border-t-4 border-indigo-600 border-solid rounded-full animate-spin"></div>
-        </div>
-      )}
-
-      {/* Conversion Results */}
       <div className="mt-6">
         {convertedAmount > 0 && !loading && (
           <div>
@@ -190,6 +202,13 @@ const CurrencyExchangePage = () => {
                 {(convertedAmount - fee).toFixed(2)} {targetCurrency}
               </span>
             </p>
+            <Button
+              onClick={handleSaveTransaction}
+              disabled={isSaving}
+              className="w-full py-3 mt-6 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+              {isSaving ? "Saving..." : "Save Transaction"}
+            </Button>
           </div>
         )}
       </div>

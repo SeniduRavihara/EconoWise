@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { db } from "@/firebase/config";
+// Import Firestore utilities if needed for real-time database
+// import { collection, getDocs, query, orderBy } from "firebase/firestore";
+// import { db } from "@/firebase/config";
 
 const ManageTransactionsPage = () => {
   interface Transaction {
@@ -15,15 +16,54 @@ const ManageTransactionsPage = () => {
   const [filter, setFilter] = useState("");
   const [loading, setLoading] = useState(true);
 
+  // Mock Data for Development
+  const mockTransactions: Transaction[] = [
+    {
+      id: "1",
+      user: "Alice Johnson",
+      amount: 1500,
+      type: "Investment",
+      timestamp: new Date(),
+    },
+    {
+      id: "2",
+      user: "Bob Smith",
+      amount: 500,
+      type: "Withdrawal",
+      timestamp: new Date(),
+    },
+    {
+      id: "3",
+      user: "Charlie Davis",
+      amount: 3000,
+      type: "Deposit",
+      timestamp: new Date(),
+    },
+    {
+      id: "4",
+      user: "Dana Lee",
+      amount: 250,
+      type: "Investment",
+      timestamp: new Date(),
+    },
+    {
+      id: "5",
+      user: "Eve Adams",
+      amount: 700,
+      type: "Transfer",
+      timestamp: new Date(),
+    },
+  ];
+
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
         setLoading(true);
 
-        // Fetch transactions from Firestore
+        // Uncomment this block when fetching from Firestore
+        /*
         const collectionRef = collection(db, "transactions");
         const q = query(collectionRef, orderBy("timestamp", "desc"));
-
         const querySnapshot = await getDocs(q);
         const transactionsData = querySnapshot.docs.map((doc) => {
           const data = doc.data();
@@ -36,6 +76,10 @@ const ManageTransactionsPage = () => {
           };
         });
         setTransactions(transactionsData);
+        */
+
+        // Use mock data during development
+        setTransactions(mockTransactions);
       } catch (error) {
         console.error("Error fetching transactions:", error);
       } finally {
@@ -44,6 +88,7 @@ const ManageTransactionsPage = () => {
     };
 
     fetchTransactions();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const filteredTransactions = transactions.filter((transaction) =>
@@ -94,7 +139,7 @@ const ManageTransactionsPage = () => {
                   </td>
                   <td className="py-2 px-4 border-b">{transaction.type}</td>
                   <td className="py-2 px-4 border-b">
-                    {new Date(transaction.timestamp?.toDate()).toLocaleString()}
+                    {new Date(transaction.timestamp).toLocaleString()}
                   </td>
                 </tr>
               ))

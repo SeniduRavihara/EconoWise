@@ -5,102 +5,59 @@ interface ExchangeRate {
   currencyPair: string;
   rate: number;
   lastUpdated: string;
+  fee?: number; // Optional fee property
 }
 
 const ManageCurrencyExchangePage: React.FC = () => {
-  const [exchangeRates, setExchangeRates] = useState<ExchangeRate[]>([]);
-  const [newRate, setNewRate] = useState<number | string>("");
+  // Mock data for exchange rates
+  const mockExchangeRates: ExchangeRate[] = [
+    { currencyPair: "USD/EUR", rate: 0.91, lastUpdated: "2025-01-01 10:00 AM" },
+    { currencyPair: "USD/GBP", rate: 0.79, lastUpdated: "2025-01-01 10:00 AM" },
+    {
+      currencyPair: "USD/JPY",
+      rate: 114.15,
+      lastUpdated: "2025-01-01 10:00 AM",
+    },
+    { currencyPair: "USD/AUD", rate: 1.34, lastUpdated: "2025-01-01 10:00 AM" },
+    { currencyPair: "USD/CAD", rate: 1.26, lastUpdated: "2025-01-01 10:00 AM" },
+  ];
 
-  // Fetch the current exchange rates (simulated here with dummy data)
+  const [exchangeRates, setExchangeRates] = useState<ExchangeRate[]>([]);
+
+  // Load mock data into state
   useEffect(() => {
-    const fetchExchangeRates = async () => {
-      // Replace with actual API call to fetch exchange rates
-      const response = await fetch("/api/exchange-rates");
-      const data = await response.json();
-      setExchangeRates(data);
+    const initializeData = () => {
+      // Add default fees (e.g., 0) to each rate
+      const ratesWithFees = mockExchangeRates.map((rate) => ({
+        ...rate,
+        fee: 0, // Default fee
+      }));
+      setExchangeRates(ratesWithFees);
     };
 
-    fetchExchangeRates();
+    initializeData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Handle the addition of a new exchange rate
-  const handleAddExchangeRate = async () => {
-    if (newRate && !isNaN(Number(newRate))) {
-      const newExchangeRate = {
-        currencyPair: "USD/GBP", // Example pair, replace with dynamic values
-        rate: Number(newRate),
-        lastUpdated: new Date().toLocaleString(),
-      };
-
-      // Replace with actual API call to add new exchange rate
-      const response = await fetch("/api/add-exchange-rate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newExchangeRate),
-      });
-
-      if (response.ok) {
-        setExchangeRates((prevRates) => [...prevRates, newExchangeRate]);
-        setNewRate(""); // Clear the input field
-      } else {
-        console.error("Failed to add exchange rate");
-      }
-    } else {
-      alert("Please enter a valid rate.");
-    }
-  };
-
-  // Handle the removal of an exchange rate
-  const handleRemoveExchangeRate = async (currencyPair: string) => {
-    // Replace with actual API call to delete exchange rate
-    const response = await fetch("/api/delete-exchange-rate", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ currencyPair }),
-    });
-
-    if (response.ok) {
-      setExchangeRates((prevRates) =>
-        prevRates.filter((rate) => rate.currencyPair !== currencyPair)
-      );
-    } else {
-      console.error("Failed to delete exchange rate");
-    }
+  // Handle fee changes
+  const handleFeeChange = (currencyPair: string, newFee: number) => {
+    setExchangeRates((prevRates) =>
+      prevRates.map((rate) =>
+        rate.currencyPair === currencyPair ? { ...rate, fee: newFee } : rate
+      )
+    );
   };
 
   return (
     <div className="max-w-7xl lg:w-[85%] mt-5 mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-3xl font-semibold text-center text-gray-700 mb-6">
-        Manage Currency Exchange Rates
+        Manage Currency Exchange Fees
       </h2>
-
-      {/* New Exchange Rate Input */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex space-x-4">
-          <input
-            type="number"
-            className="px-4 py-2 border border-gray-300 rounded-md w-40"
-            placeholder="Enter Rate"
-            value={newRate}
-            onChange={(e) => setNewRate(e.target.value)}
-          />
-          <button
-            onClick={handleAddExchangeRate}
-            className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-          >
-            Add Rate
-          </button>
-        </div>
-      </div>
 
       {/* Exchange Rates Table */}
       <div>
         <h3 className="text-2xl font-medium text-gray-700 mb-4">
-          Current Exchange Rates
+          Current Exchange Rates and Fees
         </h3>
         <table className="min-w-full table-auto border-collapse border border-gray-300">
           <thead>
@@ -115,7 +72,7 @@ const ManageCurrencyExchangePage: React.FC = () => {
                 Last Updated
               </th>
               <th className="px-4 py-2 border border-gray-300 text-left">
-                Actions
+                Fee (%)
               </th>
             </tr>
           </thead>
@@ -133,14 +90,17 @@ const ManageCurrencyExchangePage: React.FC = () => {
                     {rate.lastUpdated}
                   </td>
                   <td className="px-4 py-2 border border-gray-300">
-                    <button
-                      onClick={() =>
-                        handleRemoveExchangeRate(rate.currencyPair)
+                    <input
+                      type="number"
+                      className="px-2 py-1 border border-gray-300 rounded-md w-20"
+                      value={rate.fee ?? 0}
+                      onChange={(e) =>
+                        handleFeeChange(
+                          rate.currencyPair,
+                          Number(e.target.value)
+                        )
                       }
-                      className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                    >
-                      Remove
-                    </button>
+                    />
                   </td>
                 </tr>
               ))
